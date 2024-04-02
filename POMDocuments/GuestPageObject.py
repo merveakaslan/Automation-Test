@@ -54,6 +54,7 @@ class GuestPage:
     def clickPublishCommentButton(self):
         sleep(2)
         self.driver.find_element(By.CSS_SELECTOR, self.Locator_PublishCommentButton_CSS).click()
+        sleep(3)
 
     def CommentCheck(self):
         sleep(3)

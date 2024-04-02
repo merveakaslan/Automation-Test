@@ -2,10 +2,11 @@ import pyperclip
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from time import sleep
+from selenium.webdriver.common.action_chains import ActionChains
 
 class PostPage:
 
-    #-----Locators------
+    #Locators
     Locator_AddImage_Xpath = "(//span[@class='DPvwYc sm8sCf GHpiyd'][contains(text(),'')])[1]"
     Locator_AddImage_URL_Xpath = "/html[1]/body[1]/div[7]/c-wiz[2]/div[1]/c-wiz[1]/div[1]/div[2]/div[1]/div[1]/div[3]/span[1]/div[1]/div[1]/div[1]/div[1]/div[24]/div[1]/div[1]/span[4]/div[3]/div[1]"
     Locator_iframe_AddURL_Xpath = "/html/body/div[11]/div[2]/div/iframe"
@@ -16,13 +17,17 @@ class PostPage:
     Locator_iframe_TextArea_Xpath = "/html[1]/body[1]/div[7]/c-wiz[1]/div[1]/c-wiz[1]/div[1]/div[2]/div[1]/div[1]/div[3]/span[1]/div[1]/div[1]/div[2]"
     Locator_iframe_TextArea_CSS = "iframe[class='ZW3ZFc editable']"
     Locator_TextArea_Xpath = "(//body)[1]"
-    Locator_UpdateButton_CSS = "div[aria-label='Publish'] div[class='A2yzVd']"
+    Locator_UpdateButton_CSS = "div[aria-label='Update'] div[class='A2yzVd']"
+    Locator_PostList_XPATH = "/html[1]/body[1]/div[7]/c-wiz[1]/div[2]/div[1]/c-wiz[1]/div[2]/c-wiz[1]/div[1]/div[1]/div[1]/div[1]"
+    Locator_DeleteIcon_XPATH = "(//span[@class='DPvwYc'][contains(text(),'')])[2]"
+    Locator_TrashButton_XPATH = "(//span[@class='RveJvd snByac'][normalize-space()='Trash post'])[2]"
+    Locator_AfterDeletePostList_XPATH= "(//div[@class='gNK4lf'])"
 
-    #-----Variable_Values-----
+    #Variable_Values
     ImageURL = "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
     Text = "Editted Post"
 
-    #-----Methods-----
+    #Methods
     def __init__(self,driver):
         self.driver=driver
 
@@ -57,10 +62,12 @@ class PostPage:
     def clickUpdateButton(self):
         sleep(3)
         self.driver.find_element(By.CSS_SELECTOR, self.Locator_UpdateButton_CSS).click()
+        sleep(3)
 
     def clickConfirmButton(self):
         sleep(3)
         self.driver.find_element(By.XPATH, self.Locator_ConfirmButton_Xpath).click()
+        sleep(3)
 
     def SwitchFrame_to_TextArea(self):
         sleep(3)
@@ -70,3 +77,31 @@ class PostPage:
         sleep(3)
         pyperclip.copy(Text)
         self.driver.find_element(By.XPATH,self.Locator_TextArea_Xpath).send_keys(Keys.CONTROL, 'v')
+
+    def PostList(self):
+        sleep(3)
+        elements = self.driver.find_elements(By.XPATH, self.Locator_PostList_XPATH)
+        if not elements:
+            assert False
+        else:
+            assert True
+
+    def clickDeleteIcon(self):
+        sleep(3)
+        action = ActionChains(self.driver)
+        delete_item_list = self.driver.find_element(By.XPATH, self.Locator_PostList_XPATH)
+        action.move_to_element(delete_item_list).perform()
+        sleep(3)
+        self.driver.find_element(By.XPATH, self.Locator_DeleteIcon_XPATH).click()
+
+    def clickTrashButton(self):
+        sleep(3)
+        self.driver.find_element(By.XPATH, self.Locator_TrashButton_XPATH).click()
+
+    def AfterDeletePostList(self):
+        sleep(3)
+        elements = self.driver.find_elements(By.XPATH, self.Locator_AfterDeletePostList_XPATH)
+        if not elements:
+            assert True
+        else:
+            assert False
